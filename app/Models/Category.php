@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Category extends Model
+{
+    use HasFactory;
+
+    protected $guarded = ['id'];
+
+    public function packages()
+    {
+        return $this->hasMany(Package::class);
+    }
+
+    public function packageTypes()
+    {
+        return $this->hasMany(PackageType::class);
+    }
+
+    public function paymentPromos()
+    {
+        return $this->hasMany(PaymentPromo::class);
+    }
+}
