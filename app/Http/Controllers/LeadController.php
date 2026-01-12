@@ -7,9 +7,30 @@ use App\Models\Lead;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\DataTables;
 
 class LeadController extends Controller
 {
+    public function index()
+    {
+        return view('page.data-registrasi.index');
+    }
+
+    public function data()
+    {
+        return DataTables::of(Lead::latest())
+            ->addColumn('created_at', function ($lead) {
+                return $lead->created_at->format('d/m/Y H:i');
+            })
+            ->make(true);
+    }
+
+    public function destroy($id)
+    {
+        Lead::findOrFail($id)->delete();
+        return response()->json(['success' => true]);
+    }
+
     public function store(RegisterLeadRequest $request)
     {
         // try {

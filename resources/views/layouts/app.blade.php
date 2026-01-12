@@ -211,15 +211,19 @@
 
                 {{-- DATA REGISTRASI --}}
                 <li>
-                    <a href="#"
+                    <a href="{{ route('lead.index') }}"
                        class="flex items-center space-x-4 px-5 py-3 rounded-xl transition-all
-                              hover:bg-purple-800 hover:translate-x-1 hover:shadow">
+                              {{ request()->routeIs('lead.*') 
+                                    ? 'bg-purple-800 shadow translate-x-1' 
+                                    : 'hover:bg-purple-800 hover:translate-x-1 hover:shadow' }}">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-12 0v1z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-12 0v1z"/>
                         </svg>
                         <span class="text-sm">Data Registrasi</span>
                     </a>
                 </li>
+
             </ul>
         </nav>
 

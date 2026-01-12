@@ -182,4 +182,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [TermController::class, 'edit'])->name('index');
         Route::post('/', [TermController::class, 'update'])->name('update'); // Ubah ke POST
     });
+
+
+    Route::get('/admin/leads', [LeadController::class, 'index'])->name('lead.index');
+    Route::get('/admin/leads/data', [LeadController::class, 'data'])->name('lead.data');
+    Route::delete('/admin/leads/{id}', [LeadController::class, 'destroy'])->name('lead.destroy');
 });
