@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('page.banners.index', absolute: false));
+        return redirect()->intended(route('admin.banners.index', absolute: false));
     }
 
     /**
