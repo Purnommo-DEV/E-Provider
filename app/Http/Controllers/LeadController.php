@@ -69,15 +69,22 @@ class LeadController extends Controller
                 'name'       => $request->name,
                 'email'      => $request->email ?? null,
                 'phone'      => $phone_normalized,
+                'address'    => $request->address ?? null,
+                'kelurahan'  => $request->kelurahan ?? null,
+                'rt'         => $request->rt ?? null,
+                'blok'       => $request->blok ?? null,
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
             ]);
 
             // Buat pesan WA
-            $message = "Pendaftaran baru dari website!\n" .
+            $message = "Pendaftaran baru!\n" .
                        "Nama: {$lead->name}\n" .
-                       "WA: {$phone_normalized}\n" .
-                       ($lead->email ? "Email: {$lead->email}\n" : "") .
+                       "HP: {$phone_normalized}\n" .
+                       ($lead->address ? "Alamat: {$lead->address}\n" : "") .
+                       ($lead->kelurahan ? "Kelurahan: {$lead->kelurahan}\n" : "") .
+                       ($lead->rt ? "RT: {$lead->rt}\n" : "") .
+                       ($lead->blok ? "Blok/RW: {$lead->blok}\n" : "") .
                        "Waktu: " . $lead->created_at->format('d/m/Y H:i');
 
             $adminPhone = '6281234567890'; // GANTI DENGAN NOMOR ADMIN KAMU (format +62 tanpa spasi)

@@ -509,6 +509,100 @@
                     <form id="registration-form" method="POST" action="{{ route('leads.store') }}" class="p-6 md:p-8 space-y-4">
                         @csrf
                         <input type="hidden" name="g-recaptcha-response" id="recaptcha-token">
+                    <!-- Alamat (trigger) -->
+                        <div class="relative grid items-center">
+                            <input
+                                id="address" name="address" type="text"
+                                class="peer h-14 w-full rounded-xl border border-gray-300 px-5 text-base 
+                                       focus:border-purple-500 focus:ring-2 focus:ring-purple-400/30 focus:outline-none"
+                                placeholder=" "
+                            required>
+                            <label
+                                for="address"
+                                class="absolute left-5 text-gray-500 text-base font-medium pointer-events-none 
+                                       transition-all duration-200
+                                       peer-focus:-translate-y-4 peer-focus:text-xs peer-focus:text-purple-600
+                                       peer-[&:not(:placeholder-shown)]:-translate-y-4
+                                       peer-[&:not(:placeholder-shown)]:text-xs
+                                       peer-[&:not(:placeholder-shown)]:text-purple-600"
+                            >
+                                Alamat Lengkap
+                            </label>
+                            <p id="address-error" class="text-red-600 text-sm mt-1 hidden"></p>
+                        </div>
+
+                        <!-- Kelompok Alamat Tambahan (awalnya hidden) -->
+                        <div id="address-detail-group" class="space-y-5 hidden">
+
+                            <!-- Kelurahan -->
+                            <div class="relative grid items-center">
+                                <input
+                                    id="kelurahan" name="kelurahan" type="text"
+                                    class="peer h-14 w-full rounded-xl border border-gray-300 px-5 text-base 
+                                           focus:border-purple-500 focus:ring-2 focus:ring-purple-400/30 focus:outline-none"
+                                    placeholder=" "
+                                required>
+                                <label
+                                    for="kelurahan"
+                                    class="absolute left-5 text-gray-500 text-base font-medium pointer-events-none 
+                                           transition-all duration-200
+                                           peer-focus:-translate-y-4 peer-focus:text-xs peer-focus:text-purple-600
+                                           peer-[&:not(:placeholder-shown)]:-translate-y-4
+                                           peer-[&:not(:placeholder-shown)]:text-xs
+                                           peer-[&:not(:placeholder-shown)]:text-purple-600"
+                                >
+                                    Kelurahan / Desa
+                                </label>
+                                <p id="kelurahan-error" class="text-red-600 text-sm mt-1 hidden"></p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+
+                                <!-- RT -->
+                                <div class="relative grid items-center">
+                                    <input
+                                        id="rt" name="rt" type="text" maxlength="5"
+                                        class="peer h-14 w-full rounded-xl border border-gray-300 px-5 text-base 
+                                               focus:border-purple-500 focus:ring-2 focus:ring-purple-400/30 focus:outline-none"
+                                        placeholder=" "
+                                    >
+                                    <label
+                                        for="rt"
+                                        class="absolute left-5 text-gray-500 text-base font-medium pointer-events-none 
+                                               transition-all duration-200
+                                               peer-focus:-translate-y-4 peer-focus:text-xs peer-focus:text-purple-600
+                                               peer-[&:not(:placeholder-shown)]:-translate-y-4
+                                               peer-[&:not(:placeholder-shown)]:text-xs
+                                               peer-[&:not(:placeholder-shown)]:text-purple-600"
+                                    required>
+                                        RT
+                                    </label>
+                                    <p id="rt-error" class="text-red-600 text-sm mt-1 hidden"></p>
+                                </div>
+
+                                <!-- Blok / RW (bisa diganti sesuai kebutuhan) -->
+                                <div class="relative grid items-center">
+                                    <input
+                                        id="blok" name="blok" type="text" maxlength="10"
+                                        class="peer h-14 w-full rounded-xl border border-gray-300 px-5 text-base 
+                                               focus:border-purple-500 focus:ring-2 focus:ring-purple-400/30 focus:outline-none"
+                                        placeholder=" "
+                                    >
+                                    <label
+                                        for="blok"
+                                        class="absolute left-5 text-gray-500 text-base font-medium pointer-events-none 
+                                               transition-all duration-200
+                                               peer-focus:-translate-y-4 peer-focus:text-xs peer-focus:text-purple-600
+                                               peer-[&:not(:placeholder-shown)]:-translate-y-4
+                                               peer-[&:not(:placeholder-shown)]:text-xs
+                                               peer-[&:not(:placeholder-shown)]:text-purple-600"
+                                    >
+                                        Blok / RW
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
 
                         <!-- Nama Lengkap -->
                         <div class="relative grid items-center">
@@ -914,6 +1008,41 @@
                 }
             });
 
+            const $addressInput = $('#address');
+            const $detailGroup = $('#address-detail-group');
+            
+            // Fungsi debounce (untuk delay eksekusi)
+            function debounce(func, delay) {
+                let timeout;
+                return function (...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), delay);
+                };
+            }
+            
+            // Handler dengan debounce 300ms
+            const handleAddressChange = debounce(function () {
+                const hasValue = $(this).val().trim().length > 0;
+                
+                if (hasValue) {
+                    if ($detailGroup.hasClass('hidden')) {
+                        $detailGroup.removeClass('hidden').hide().slideDown(300);
+                    }
+                } else {
+                    $detailGroup.slideUp(300, function () {
+                        $(this).addClass('hidden');
+                    });
+                }
+            }, 300);  // Delay 300ms, bisa diubah ke 200 atau 500 sesuai selera
+            
+            // Bind event input
+            $addressInput.on('input', handleAddressChange);
+            
+            // Cek awal kalau ada value (misal setelah refresh)
+            if ($addressInput.val().trim().length > 0) {
+                $detailGroup.removeClass('hidden');
+            }
+
             $(document).ready(function() {
                 $('#registration-form').on('submit', function(e) {
                     e.preventDefault();
@@ -964,16 +1093,25 @@
                                             if (xhr.responseJSON.message) {
                                                 errorMsg = xhr.responseJSON.message;
                                             }
-                                            // Tampilkan validation errors per field jika ada
+                                            
+                                            // Tampilkan error per field
                                             if (xhr.responseJSON.errors) {
                                                 const errors = xhr.responseJSON.errors;
+                                                
+                                                // Reset semua error dulu
+                                                $('.text-red-600').addClass('hidden').text('');
+                                                
                                                 Object.keys(errors).forEach(field => {
-                                                    $(`#${field}-error`).text(errors[field][0]);
+                                                    const errorElement = $(`#${field}-error`);
+                                                    if (errorElement.length) {
+                                                        errorElement.text(errors[field][0]).removeClass('hidden');
+                                                    }
                                                 });
-                                                errorMsg = 'Mohon periksa kembali data yang Anda masukkan.';
+                                                
+                                                errorMsg = 'Mohon lengkapi data yang wajib diisi.';
                                             }
                                         }
-
+                                        
                                         Swal.fire({
                                             icon: 'error',
                                             title: 'Gagal',
