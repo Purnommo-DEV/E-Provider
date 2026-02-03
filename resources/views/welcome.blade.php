@@ -6,6 +6,8 @@
         <title>MyRepublic - Internet Cepat Unlimited untuk Rumah & Bisnis</title>
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="description" content="Internet super lancar tanpa kuota, upload download simetris, low latency. Mulai Rp235.000/bulan + hiburan lengkap.">
+        <link rel="icon" href="{{ asset('myrep.jpg') }}" type="image/jpeg">
+        <link rel="shortcut icon" href="{{ asset('myrep.jpg') }}">
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -1548,8 +1550,8 @@
                     if (pkg.speed_up_to_mbps && pkg.speed_up_to_mbps > pkg.speed_mbps) {
                         // ~~150 Mbps~~ 250 Mbps — lebih kecil lagi
                         speedDisplay = `
-                            <s class="text-sm md:text-base text-gray-500">${pkg.speed_up_to_mbps} Mbps</s>
-                            <span class="text-base md:text-lg font-semibold text-purple-900">${pkg.speed_mbps} Mbps</span>
+                            <s class="text-sm md:text-base text-gray-500">${pkg.speed_mbps} Mbps</s>
+                            <span class="text-base md:text-lg font-semibold text-purple-900">${pkg.speed_up_to_mbps} Mbps</span>
                         `;
                     } else if (pkg.speed_up_to_mbps && pkg.speed_up_to_mbps !== pkg.speed_mbps) {
                         // 250 Mbps / 150 Mbps
