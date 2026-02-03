@@ -273,7 +273,7 @@
               }
             }
             .animate-channel-loop {
-              animation: channel-loop 25s linear infinite;
+              animation: channel-loop 125s linear infinite;
             }
             /* pause saat hover (UX) */
             .animate-channel-loop:hover {
@@ -296,6 +296,16 @@
                 height: 560px; /* Fixed height untuk konsistensi */
                 min-height: auto;
                 border-bottom: 8px solid rgba(124, 58, 237, 0.1); /* Batas tipis ungu muda */
+            }
+            .package-card s {
+                text-decoration: line-through;
+                text-decoration-thickness: 2px;   /* tebal coretan */
+                text-decoration-color: #9ca3af;   /* warna abu-abu */
+                opacity: 0.75;
+            }
+
+            .package-card .font-extrabold {
+                font-weight: 900;
             }
             /* Tablet / Small Desktop: 2 cards visible */
             @media (min-width: 640px) {
@@ -413,10 +423,11 @@
             <div class="max-w-7xl mx-auto px-6">
                 <!-- SCROLL CONTAINER (INI YANG DI-SCROLL) -->
                 <div id="bannerCarousel"
-                     class="relative w-full h-[45vh] sm:h-[55vh] md:h-[65vh] lg:h-[75vh]
-                            overflow-x-hidden rounded-3xl
+                     class="relative w-full aspect-[1920/500]
+                            overflow-hidden rounded-3xl
                             shadow-[0_40px_120px_-50px_rgba(0,0,0,0.45)]
                             bg-gray-200">
+
                     <!-- TRACK -->
                     <div id="bannerTrack"
                          class="flex h-full w-full">
@@ -425,9 +436,10 @@
                                 <img
                                     src="{{ asset('storage/' . $banner->image) }}"
                                     alt="Banner {{ $loop->iteration }}"
-                                    class="w-full h-full object-cover object-center"
+                                    class="w-full h-full object-contain object-center bg-black"
                                     loading="lazy"
                                 />
+
                             </div>
                         @endforeach
                     </div>
@@ -909,8 +921,19 @@
                                 @foreach($channels->concat($channels) as $channel)
                                     <div class="flex-shrink-0 group">
                                         <div class="w-20 h-20 md:w-24 md:h-24 bg-white/80 backdrop-blur-md rounded-2xl border border-white/50 shadow-lg shadow-purple-300/20 flex items-center justify-center p-4 transition-all duration-300 group-hover:shadow-purple-500/40 group-hover:scale-105 group-hover:-translate-y-1">
-                                            @if($channel->logo)
-                                                <img src="{{ asset('storage/' . $channel->logo) }}"
+
+                                            @php
+                                                if ($channel->logo) {
+                                                    $logo = str_starts_with($channel->logo, 'http')
+                                                        ? $channel->logo
+                                                        : asset('storage/' . $channel->logo);
+                                                } else {
+                                                    $logo = null;
+                                                }
+                                            @endphp
+
+                                            @if($logo)
+                                                <img src="{{ $logo }}"
                                                      alt="{{ $channel->name }}"
                                                      class="max-h-full object-contain transition-transform duration-300 group-hover:rotate-3">
                                             @else
@@ -918,6 +941,7 @@
                                                     {{ $channel->name }}
                                                 </span>
                                             @endif
+
                                         </div>
                                     </div>
                                 @endforeach
@@ -1504,11 +1528,12 @@
             function renderPackages(packages) {
                 const track = document.getElementById('packageTrack');
                 const loading = document.getElementById('loading');
+
                 if (!track) return;
                 track.innerHTML = '';
                 loading?.classList.add('hidden');
                 if (packages.length === 0) {
-                    track.innerHTML = '<div class="w-full py-20 text-center text-gray-600 text-xl">Tidak ada paket yang sesuai filter</div>';
+                    track.innerHTML = '<div class="w-full py-20 text-center text-gray-600 text-xl">Paket lain akan segera hadir!</div>';
                     track.classList.remove('justify-center');
                     updateNavButtons();
                     return;
@@ -1516,6 +1541,29 @@
                 packages.forEach(pkg => {
                     const card = document.createElement('div');
                     card.className = 'package-card relative bg-white rounded-3xl shadow-2xl border border-purple-200/50 overflow-hidden flex flex-col h-full min-h-[520px] md:min-h-[620px] transition-all duration-300 hover:shadow-[0_20px_60px_rgba(124,58,237,0.2)] hover:-translate-y-1';
+
+                    // === LOGIKA TAMPILAN SPEED DENGAN CORETAN ===
+                    let speedDisplay = '';
+
+                    if (pkg.speed_up_to_mbps && pkg.speed_up_to_mbps > pkg.speed_mbps) {
+                        // ~~150 Mbps~~ 250 Mbps — lebih kecil lagi
+                        speedDisplay = `
+                            <s class="text-sm md:text-base text-gray-500">${pkg.speed_up_to_mbps} Mbps</s>
+                            <span class="text-base md:text-lg font-semibold text-purple-900">${pkg.speed_mbps} Mbps</span>
+                        `;
+                    } else if (pkg.speed_up_to_mbps && pkg.speed_up_to_mbps !== pkg.speed_mbps) {
+                        // 250 Mbps / 150 Mbps
+                        speedDisplay = `
+                            <span class="text-base md:text-lg font-semibold text-purple-900">${pkg.speed_mbps} Mbps</span>
+                            <span class="text-sm md:text-base text-purple-700"> / ${pkg.speed_up_to_mbps} Mbps</span>
+                        `;
+                    } else {
+                        // Normal tanpa promo
+                        speedDisplay = `
+                            <span class="text-base md:text-lg font-semibold text-purple-900">${pkg.speed_mbps} Mbps</span>
+                        `;
+                    }
+
                     card.innerHTML = `
                         <div class="fixed-top flex-shrink-0 min-h-[320px]"> <!-- Min-height untuk konsistensi, agar features tidak naik -->
                             <!-- Header modern dengan gradient overlay dan gambar blurred -->
@@ -1532,9 +1580,9 @@
                             </div>
                             <!-- Speed dengan icon WiFi untuk keren -->
                             <div class="px-4 py-2 md:py-2.5 text-center border-b border-purple-100/50 flex items-center justify-center gap-2">
-                                <i class="fas fa-wifi text-purple-600 text-lg"></i>
-                                <p class="text-base md:text-lg font-bold text-purple-800">
-                                    ${pkg.speed_mbps} Mbps
+                                <i class="fas fa-wifi text-purple-600 text-sm md:text-base"></i>
+                                <p class="flex items-center gap-1.5 font-semibold text-purple-900 whitespace-nowrap text-sm md:text-base">
+                                    ${speedDisplay}
                                 </p>
                             </div>
                             <!-- Harga dengan gradient text effect dan note kecil -->
@@ -1547,7 +1595,9 @@
                                     ${pkg.tax_included === true ? 'Sudah Termasuk PPN 11%' : 'Belum Termasuk PPN 11%'}
                                 </p>
                             </div>
-                            <!-- Channel info dengan badge-like style, atau spacer jika kosong -->
+                            <!-- Channel info dengan badge-like style, atau spacer jika kosong-->
+                            <!-- Klo pake kode ini,deskripsi di dlm card bisa sejajar, namun jika STD tidak ada maka mmbuat space kosong ckup lebar -->
+                            <!--
                             ${pkg.channel_count && pkg.channel_count !== 0 && pkg.stb_info && pkg.stb_info !== '' && pkg.stb_info !== null ? `
                             <div class="h-16 p-2 bg-indigo-50/50 border-b border-indigo-100/50 flex flex-wrap justify-center items-center gap-2 text-xs text-indigo-800 font-medium">
                                 <span class="flex items-center gap-1">
@@ -1558,7 +1608,21 @@
                                     <i class="fas fa-box text-indigo-600"></i>
                                     ${pkg.stb_info}
                                 </span>
-                            </div>` : '<div class="h-16 border-b border-indigo-100/50"></div>'}
+                            </div>` : '<div class="h-16 border-b border-indigo-100/50"></div>'} -->
+
+                            ${pkg.channel_count && pkg.channel_count > 0 && pkg.stb_info && pkg.stb_info.trim() !== '' ? `
+                                <div class="h-16 p-2 bg-indigo-50/50 border-b border-indigo-100/50 flex flex-wrap justify-center items-center gap-2 text-xs text-indigo-800 font-medium">
+                                    <span class="flex items-center gap-1">
+                                        <i class="fas fa-tv text-indigo-600"></i>
+                                        Channel TV ${pkg.channel_count} Channel
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <i class="fas fa-box text-indigo-600"></i>
+                                        ${pkg.stb_info}
+                                    </span>
+                                </div>
+                            ` : '<div class="border-b border-indigo-100/50"></div>'}
+
                             <!-- Benefits sebagai badges modern dengan hover, atau spacer jika kosong -->
                             ${pkg.benefits?.length > 0 ? `
                             <div class="h-16 p-2 bg-emerald-50/50 border-b border-emerald-100/50 flex flex-wrap justify-center items-center gap-2 overflow-y-auto">
@@ -1593,6 +1657,7 @@
                 }
                 updateNavButtons();
             }
+
             // ── INISIALISASI ─────────────────────────────────────────────────────────────────
             document.addEventListener('DOMContentLoaded', () => {
                 console.log('[INIT] Mulai auto-filter cascade');

@@ -29,7 +29,6 @@ class PackageController extends Controller
             'category',
             'packageType',
             'paymentPromo',
-            'features'  // ← tambahkan ini agar relasi features ter-load
         ])->select('packages.*');
 
         return DataTables::of($packages)
@@ -39,8 +38,6 @@ class PackageController extends Controller
             ->addColumn('promo', fn($row) => $row->paymentPromo?->name ?? '-')
             ->addColumn('price_rp', fn($row) => 'Rp ' . number_format($row->base_price ?? 0, 0, ',', '.')) // gunakan base_price sesuai migration
             ->addColumn('speed', fn($row) => $row->speed_mbps . ($row->speed_up_to_mbps ? ' / ' . $row->speed_up_to_mbps : '') . ' Mbps')
-            ->addColumn('promo_label_preview', fn($row) => $row->promo_label ? '<span class="badge badge-warning">' . $row->promo_label . '</span>' : '-')
-            ->addColumn('features_count', fn($row) => '<span class="badge badge-info">' . ($row->features ? $row->features->count() : 0) . '</span>') // ← aman dari null
             ->addColumn('is_active', fn($row) => $row->is_active
                 ? '<span class="badge badge-success">Aktif</span>'
                 : '<span class="badge badge-error">Nonaktif</span>')
@@ -50,7 +47,7 @@ class PackageController extends Controller
                     <button onclick="deletePackage(' . $row->id . ')" class="btn btn-sm btn-error"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
             ')
-            ->rawColumns(['action', 'promo_label_preview', 'features_count', 'is_active'])
+            ->rawColumns(['action', 'is_active'])
             ->make(true);
     }
 

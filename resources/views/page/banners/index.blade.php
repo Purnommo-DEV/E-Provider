@@ -49,7 +49,7 @@
             <!-- Upload Gambar -->
             <div class="space-y-3">
                 <label class="label font-semibold text-gray-700">Gambar Banner <span class="text-red-500">*</span></label>
-                <p class="text-sm text-gray-500">Rekomendasi ukuran: <strong>1920 × 800 px</strong> (rasio 2.4:1)</p>
+                <p class="text-sm text-gray-500">Rekomendasi ukuran: <strong>1920 × 500 px</strong> (rasio 2.4:1)</p>
                 
                 <input 
                     type="file" 
@@ -61,11 +61,15 @@
                 <!-- Preview Gambar -->
                 <div id="imagePreview" class="mt-6 hidden">
                     <p class="text-sm font-medium text-gray-600 mb-3">Pratinjau Gambar:</p>
-                    <div class="relative rounded-2xl overflow-hidden shadow-xl border-4 border-purple-100">
-                        <img id="previewImg" class="w-full h-96 object-cover" src="" alt="Preview Banner">
+                    <div class="relative aspect-[1920/500] w-full rounded-2xl overflow-hidden shadow-xl border-4 border-purple-100 bg-black">
+                        <img id="previewImg"
+                             class="w-full h-full object-contain"
+                             src=""
+                             alt="Preview Banner">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
                     </div>
                 </div>
+
             </div>
 
             <!-- Urutan Tampil -->

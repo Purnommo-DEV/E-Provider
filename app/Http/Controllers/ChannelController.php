@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\UploadedFile;
 
 class ChannelController extends Controller
 {
@@ -23,10 +25,22 @@ class ChannelController extends Controller
         return datatables()->of($channels)
             ->addIndexColumn()
             ->addColumn('logo_preview', function ($channel) {
-                return $channel->logo
-                    ? '<img src="' . asset('storage/' . $channel->logo) . '" class="w-24 h-24 object-contain rounded-lg shadow">'
-                    : '<span class="text-gray-400">No logo</span>';
+
+                if (!$channel->logo) {
+                    return '<span class="text-gray-400">No logo</span>';
+                }
+
+                // kalau logo berupa URL (http / https)
+                if (str_starts_with($channel->logo, 'http')) {
+                    $src = $channel->logo;
+                } else {
+                    // logo lokal (storage)
+                    $src = asset('storage/' . $channel->logo);
+                }
+
+                return '<img src="' . $src . '" class="w-24 h-24 object-contain rounded-lg shadow">';
             })
+
             ->addColumn('type', fn ($channel) => ucfirst($channel->type))
             ->addColumn('status', function ($channel) {
                 return $channel->is_active
@@ -62,6 +76,39 @@ class ChannelController extends Controller
         Channel::create($data);
 
         return response()->json(['success' => 'Channel berhasil ditambahkan']);
+    }
+
+    public function importMyRepublicTv()
+    {
+        $json = json_decode(
+            file_get_contents(storage_path('app/myrepublic_tv.json')),
+            true
+        );
+
+        $channels = $json['data']['data']['channels'] ?? [];
+        $images   = $json['data']['data']['images'] ?? [];
+
+        $inserted = 0;
+
+        foreach ($channels as $item) {
+
+            Channel::create([
+                'name'        => $item['name'],
+                'logo'        => isset($images[$item['no']])
+                    ? 'https://sapi.myrepublic.net.id' . $images[$item['no']]
+                    : null,
+                'type'        => 'tv',
+                'is_active'   => true,
+                'order'       => (Channel::max('order') ?? 0) + 1,
+            ]);
+
+            $inserted++;
+        }
+
+        return response()->json([
+            'success' => "Import TV Channel berhasil ({$inserted} data)"
+        ]);
+
     }
 
     public function show(Channel $channel)

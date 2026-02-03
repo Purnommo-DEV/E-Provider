@@ -34,8 +34,6 @@
                             <th>Nama Paket</th>
                             <th class="text-center">Speed</th>
                             <th>Harga</th>
-                            <th class="text-center">Label Promo</th>
-                            <th class="text-center">Fitur</th>
                             <th class="text-center">Status</th>
                             <th class="text-center w-32">Aksi</th>
                         </tr>
@@ -121,9 +119,30 @@
                         Speed (Mbps) <span class="text-red-500">*</span>
                     </label>
                     <div class="flex items-center gap-4">
-                        <input type="number" name="speed_mbps" placeholder="300" class="input input-bordered input-lg w-full" required min="1">
+                        <input 
+                            type="number" 
+                            name="speed_mbps" 
+                            placeholder="300" 
+                            class="input input-bordered input-lg w-full" 
+                            required 
+                            min="1"
+                            value="{{ old('speed_mbps', $package->speed_mbps ?? '') }}"
+                        >
                         <span class="text-gray-600 font-bold text-xl">/</span>
-                        <input type="number" name="speed_up_to_mbps" placeholder="400 (opsional)" class="input input-bordered input-lg w-full" min="1">
+                        <input 
+                            type="number" 
+                            name="speed_up_to_mbps" 
+                            placeholder="400 (opsional)" 
+                            class="input input-bordered input-lg w-full" 
+                            min="1"
+                            value="{{ old('speed_up_to_mbps', $package->speed_up_to_mbps ?? '') }}"
+                        >
+                    </div>
+                    <div class="label">
+                        <span class="label-text-alt text-gray-500">
+                            Isi kolom kedua hanya jika ada promo "dari ... menjadi ...".  
+                            Contoh: 300/400 atau ~~400~~ 300 Mbps
+                        </span>
                     </div>
                 </div>
 
@@ -708,8 +727,8 @@
                 paginate: { previous: "<", next: ">" }
             },
             columnDefs: [
-                { orderable: false, targets: [0, 10] },
-                { className: "text-center", targets: [0, 5, 7, 8, 9, 10] }
+                { orderable: false, targets: [0, 8] },
+                { className: "text-center", targets: [0, 5, 7, 8] }
             ],
             columns: [
                 { data: null, render: (d, t, r, m) => m.row + m.settings._iDisplayStart + 1 },
@@ -719,8 +738,6 @@
                 { data: 'name', render: d => `<div class="font-medium">${d}</div>` },
                 { data: 'speed', render: d => `<span class="font-bold">${d}</span>` },
                 { data: 'price_rp' },
-                { data: 'promo_label_preview', render: d => d ? `<span class="badge badge-warning">${d}</span>` : '-' },
-                { data: 'features_count', render: d => `<span class="badge badge-info">${d}</span>` },
                 { data: 'is_active', render: d => d ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-error">Nonaktif</span>' },
                 {
                     data: null,

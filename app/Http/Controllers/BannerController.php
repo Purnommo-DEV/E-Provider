@@ -62,10 +62,10 @@ class BannerController extends Controller
         $uploadedImage = $request->file('image');
 
         $image = $manager->read($uploadedImage)
-                         ->resize(1920, 800, function ($constraint) {
-                             $constraint->aspectRatio();
-                             $constraint->upsize();
-                         })
+                        ->resize(1920, 500, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        })
                          ->toWebp(85);
 
         $filename = 'banner_' . time() . '_' . uniqid() . '.webp';
@@ -127,7 +127,7 @@ class BannerController extends Controller
             $uploadedImage = $request->file('image');
 
             $image = $manager->read($uploadedImage)
-                             ->resize(1920, 800, function ($constraint) {
+                             ->resize(1920, 500, function ($constraint) {
                                  $constraint->aspectRatio();
                                  $constraint->upsize();
                              })

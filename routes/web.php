@@ -173,6 +173,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{channel}', [ChannelController::class, 'show'])->name('show');
         Route::put('/{channel}', [ChannelController::class, 'update'])->name('update');
         Route::delete('/{channel}', [ChannelController::class, 'destroy'])->name('destroy');
+        Route::post(
+            '/import-myrep-tv',
+            [ChannelController::class, 'importMyRepublicTv']
+        );
+
+
     });
 
     // ===========================================

@@ -18,6 +18,9 @@
                     class="bg-orange-500 hover:bg-orange-600 text-purple-950 font-bold py-3 px-6 rounded-xl shadow-lg transition transform hover:scale-105">
                 <i class="fas fa-plus mr-2"></i> Tambah Channel
             </button>
+            <button id="importTv" class="btn btn-success">
+                Sync TV MyRepublic
+            </button>
         </div>
     </div>
 
@@ -266,5 +269,18 @@
             }
         });
     });
+
+    document.getElementById('importTv').onclick = async () => {
+        const res = await fetch('/admin/channels/import-myrep-tv', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
+
+        const json = await res.json();
+
+        alert(json.success ?? json.error);
+    };
 </script>
 @endpush
