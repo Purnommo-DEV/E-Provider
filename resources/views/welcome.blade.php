@@ -966,7 +966,7 @@
                             <p class="text-purple-200 text-sm">Internet Cepat • Stabil • Tanpa Batas</p>
                         </div>
                     </div>
-                    <div class="flex gap-4">
+<!--                     <div class="flex gap-4">
                         <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
                             <i class="fab fa-facebook-f"></i>
                         </a>
@@ -979,7 +979,7 @@
                         <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
                             <i class="fab fa-twitter"></i>
                         </a>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
@@ -988,9 +988,18 @@
                             <i class="fas fa-headset"></i> Layanan Pelanggan
                         </h3>
                         <ul class="space-y-2 text-purple-200">
-                            <li>☎️ <span class="font-medium">1500-123</span> (24/7)</li>
-                            <li>📧 cs@myrepublic.co.id</li>
-                            <li>💬 Live Chat (08.00–22.00)</li>
+                            <li>
+                                ☎️ 
+                                <a 
+                                    href="https://wa.me/62813888841434" 
+                                    target="_blank" 
+                                    class="font-medium text-green-400 hover:text-green-300 underline"
+                                >
+                                    WhatsApp: 0813-8884-1434
+                                </a>
+                            </li>
+                            <!-- <li>📧 cs@myrepublic.co.id</li> -->
+                            <!-- <li>💬 Live Chat (08.00–22.00)</li> -->
                         </ul>
                     </div>
                     <div>
@@ -998,11 +1007,10 @@
                             <i class="fas fa-map-marker-alt"></i> Kantor Pusat
                         </h3>
                         <address class="not-italic text-purple-200">
-                            Gedung Telkom, Jl. Jend. Gatot Subroto No. 24<br>
-                            Jakarta Selatan 12710
+                            Green Office Park 6, Jl. BSD Green Office Park, Sampora, Cisauk, Tangerang Regency, Banten 15345. MyRepublic Branch BSD
                         </address>
                     </div>
-                    <div>
+                    <!-- <div>
                         <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
                             <i class="fas fa-envelope"></i> Langganan Newsletter
                         </h3>
@@ -1013,12 +1021,11 @@
                             </button>
                         </form>
                         <p class="text-xs text-purple-300 mt-2">Dapatkan promo & tips teknologi setiap minggu.</p>
-                    </div>
+                    </div -->>
                 </div>
 
                 <div class="pt-8 border-t border-purple-800/30 text-center text-purple-300 text-sm">
                     <p>© {{ date('Y') }} MyRepublic Indonesia. All rights reserved.</p>
-                    <p class="mt-1">Proudly Indonesian • Berizin Kominfo No. 1234/PI/BPPT/2025</p>
                 </div>
             </div>
         </footer>
