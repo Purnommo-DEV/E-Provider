@@ -966,20 +966,20 @@
                             <p class="text-purple-200 text-sm">Internet Cepat • Stabil • Tanpa Batas</p>
                         </div>
                     </div>
-<!--                     <div class="flex gap-4">
-                        <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
+                    <div class="flex gap-4">
+                        <a href="#!" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
+                        <a href="#!" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
+                        <a href="#!" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
                             <i class="fab fa-youtube"></i>
                         </a>
-                        <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
+                        <a href="#!" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
                             <i class="fab fa-twitter"></i>
                         </a>
-                    </div> -->
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
@@ -1021,7 +1021,7 @@
                             </button>
                         </form>
                         <p class="text-xs text-purple-300 mt-2">Dapatkan promo & tips teknologi setiap minggu.</p>
-                    </div -->>
+                    </div -->
                 </div>
 
                 <div class="pt-8 border-t border-purple-800/30 text-center text-purple-300 text-sm">
